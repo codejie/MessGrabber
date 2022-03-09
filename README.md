@@ -1,2 +1,2 @@
 # MessGrapper
- a library that wrapper ZoomEye API.
+ a library that wraps ZoomEye API.
