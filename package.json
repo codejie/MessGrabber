@@ -19,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/codejie/MessGrapper/issues"
   },
-  "homepage": "https://github.com/codejie/MessGrapper#readme"
+  "homepage": "https://github.com/codejie/MessGrapper#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.21"
+  },
+  "dependencies": {
+    "axios": "^0.26.0"
+  }
 }
