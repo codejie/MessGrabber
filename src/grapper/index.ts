@@ -14,7 +14,7 @@ export interface Response {
 
 }
 
-export class Grapper {
+export abstract class Grapper {
     protected filters: string[]
 
     private levelCount: number = 0;
@@ -66,10 +66,10 @@ export class Grapper {
 
     request<Req extends Request, Resp extends Response>(req: Req): Promise<Resp> {
         return new Promise<Resp>((resolve, reject) => {
-            const uri = this.makeQueryUri(req);
+            const uri: string = this.makeQueryUri(req);
             this.postRequest(uri)
                 .then((resp: any) => {
-                    const data = this.analyseResponse(resp);
+                    const data: Resp = this.analyseResponse(resp);
                     resolve(data);
                 })
                 .catch((error: any) => {
@@ -77,4 +77,7 @@ export class Grapper {
                 });
         });
     }
+    protected abstract makeQueryUri<Req extends Request>(req: Req): string;
+    protected abstract postRequest(uri: string): Promise<any>;
+    protected abstract analyseResponse<Resp extends Response>(resp: any): Resp;
 }
