@@ -1,25 +1,22 @@
-import { Session } from "inspector";
-import { Grapper } from "./src/grapper";
 
-const session: Session = new Session();
+import logger from "./src/logger";
+import Session from "./src/session";
+import { domainOutput } from "./test/domain-search";
+import { hostOutput } from "./test/host-output";
+import { webOutput } from "./test/web-output";
 
-const grapper = new Grapper(session);
-const str = grapper.scan({
-    a: 1,
-    b: 2,
-    and: {
-        x: 2,
-        y: 1,
-        or: {
-            m: 3
-        },
-        and: {
-            k: "ccc"
-        }
-    },
-    or: {
-        XXX: 'xxxx'
-    },
-    O: 'p'
+const session: Session = new Session({
+    apiKey: 'AA2c4A6a-4A2d-e0901-8C7e-f1ceD3FD084',
+    baseUrl: 'https://api.zoomeye.org/'
 });
-console.log(str);
+
+async function main(): Promise<void> {
+    await hostOutput(session);
+    await webOutput(session);
+    await domainOutput(session);
+}
+;
+main();
+
+
+

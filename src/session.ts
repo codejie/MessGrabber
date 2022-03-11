@@ -14,7 +14,9 @@ export default class Session {
             baseURL: opts.baseUrl,
             headers: {
                 'API-KEY': opts.apiKey
-            }
+            },
+            timeout: 30000,
+            timeoutErrorMessage: 'TIMEOUT !'
         });
     }
 

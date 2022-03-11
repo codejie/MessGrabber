@@ -5,25 +5,26 @@ export type FilterOptions = {
 };
 
 export interface Request {
-    // filter: FilterOptions,
-    page?: number,
-    // facets?: string[]
+    page: number
 };
 
 export interface Response {
-
+    page: number,
+    total: number
 }
 
 export abstract class Grapper {
-    protected filters: string[]
+    protected filters: string[] | undefined = undefined;
+    protected facets: string[] | undefined = undefined;
 
     private levelCount: number = 0;
 
     constructor(protected session: Session) {
         this.filters = this.initFilters();
+        this.facets = this.initFacets();
     }
 
-    protected scan(opts: FilterOptions, mode: string = 'or'): string {
+    protected scanFilterOptions(opts: FilterOptions, mode: string = 'or'): string {
         ++ this.levelCount;
 
         let level = this.levelCount;
@@ -32,9 +33,9 @@ export abstract class Grapper {
         for (let i = 0; i < keys.length; ++ i) {
             const item = keys[i];
             if (item === 'or' || item === 'and') {
-                ret += this.scan(opts[item], item);
+                ret += this.scanFilterOptions(opts[item], item);
             } else {
-                if (!this.check(item)) {
+                if (!this.checkFilter(item)) {
                     throw new Error(`'${item}' is NOT legal filter.`);
                 }
                 ret += `${item}:"${opts[item]}"`;
@@ -55,21 +56,46 @@ export abstract class Grapper {
         return ret;
     }
 
-    protected check(item: string): boolean {
+    protected scanFacetsOptions(opts?: string[]): string {
+        if (opts) {
+            opts.forEach(item => {
+                if (!this.checkFacte(item)) {
+                    throw new Error(`'${item}' is NOT legal facte.`);
+                }
+            });
+            return opts.join(',');
+        }
+        return '';
+    }
+
+    protected checkFilter(item: string): boolean {
+        if (this.filters) {
+            return this.filters.indexOf(item) !== -1;
+        }
         return true;
-        // return this.filters.indexOf(item) !== -1;
     }
 
-    protected initFilters(): string[] {
-        return [];
+    protected checkFacte(item: string): boolean {
+        if (this.facets) {
+            return this.facets.indexOf(item) !== -1;
+        }
+        return true;
+    }    
+
+    protected initFilters(): string[] | undefined{
+        return undefined;
     }
 
-    request<Req extends Request, Resp extends Response>(req: Req): Promise<Resp> {
-        return new Promise<Resp>((resolve, reject) => {
+    protected initFacets(): string[] | undefined{
+        return undefined;
+    }    
+
+    request(req: Request): Promise<Response> {
+        return new Promise<Response>((resolve, reject) => {
             const uri: string = this.makeQueryUri(req);
             this.postRequest(uri)
                 .then((resp: any) => {
-                    const data: Resp = this.analyseResponse(resp);
+                    const data: Response = this.analyseResponse(req, resp);
                     resolve(data);
                 })
                 .catch((error: any) => {
@@ -77,7 +103,12 @@ export abstract class Grapper {
                 });
         });
     }
-    protected abstract makeQueryUri<Req extends Request>(req: Req): string;
-    protected abstract postRequest(uri: string): Promise<any>;
-    protected abstract analyseResponse<Resp extends Response>(resp: any): Resp;
+
+    protected postRequest(uri: string): Promise<any> {
+        return this.session.get(uri);
+    }
+
+    protected abstract makeQueryUri(req: Request): string;
+
+    protected abstract analyseResponse(req: Request, resp: any): Response;
 }

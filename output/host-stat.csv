@@ -1,0 +1,56 @@
+product
+Key,Count
+Huawei TR-069 remote access,26986473
+HUAWEI Home Gateway HG658d WAP httpd,1916979
+HUAWEI ONT HG8245H broadband router httpd,1607135
+Huawei HG532e ADSL modem http admin,1602341
+Huawei Home Gateway telnetd,1516298
+Huawei telnetd,1130919
+HUAWEI AR series httpd,429772
+Huawei WAP http admin,385764
+Huawei HG8245 modem http admin,366190
+Huawei HG532e ADSL router httpd,357575
+
+
+device
+Key,Count
+broadband router,27101905
+,6081344
+router,4176822
+WAP,468373
+switch,347831
+firewall,151726
+Broadband router,20281
+specialized,14275
+web application,4787
+VoIP phone,1797
+
+
+service
+Key,Count
+http,30652369
+https,4595378
+telnet,2727409
+ssh,331029
+sip,45446
+upnp,18072
+ftp,3621
+http-proxy,454
+cwmp,399
+blackice-icecap,366
+
+
+country
+Key,Count
+Mexico,10479149
+United Kingdom,3943086
+China,2754695
+Turkey,2714482
+Germany,2384865
+Egypt,1970039
+Saudi Arabia,1574783
+New Zealand,1240862
+Argentina,1066760
+Dominican,903958
+
+
