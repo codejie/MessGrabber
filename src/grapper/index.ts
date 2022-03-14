@@ -1,3 +1,4 @@
+import logger from "../logger";
 import Session from "../session";
 
 export type FilterOptions = {
@@ -93,6 +94,9 @@ export abstract class Grapper {
     request(req: Request): Promise<Response> {
         return new Promise<Response>((resolve, reject) => {
             const uri: string = this.makeQueryUri(req);
+
+            logger.debug('URI = ' + uri);
+
             this.postRequest(uri)
                 .then((resp: any) => {
                     const data: Response = this.analyseResponse(req, resp);
@@ -109,6 +113,5 @@ export abstract class Grapper {
     }
 
     protected abstract makeQueryUri(req: Request): string;
-
     protected abstract analyseResponse(req: Request, resp: any): Response;
 }

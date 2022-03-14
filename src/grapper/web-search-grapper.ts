@@ -70,11 +70,11 @@ export class WebSearchGrapper extends Grapper {
         });
 
         const factes: FacetStruct[] = [];
-        if (resp.facets) {
-            Object.keys(resp.facets).forEach(item => {
+        if (resp.data.facets) {
+            Object.keys(resp.data.facets).forEach(item => {
                 factes.push({
                     name: item,
-                    data: resp.facets[item]
+                    data: resp.data.facets[item]
                 });
             });
         }

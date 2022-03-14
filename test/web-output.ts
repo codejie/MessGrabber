@@ -1,6 +1,7 @@
 import fs, { WriteStream } from 'fs';
 import Session from '../src/session';
 import { FacetStruct, WebInfoStruct, WebSearchGrapper, WebSearchRequest, WebSearchResponse } from "../src/grapper/web-search-grapper";
+import { strEscape } from '../src/helper';
 
 export async function webOutput(session: Session): Promise<void> {
 
@@ -22,7 +23,7 @@ export async function webOutput(session: Session): Promise<void> {
     const info = fs.createWriteStream('./output/web-output.csv');
     writeln(info, ['site', 'ip', 'isp', 'domains','keywords', 'description', 'location', 'city', 'country']);
     result.forEach(item => {
-        writeln(info, [item.site, item.ip.join('|'), item.geoInfo.isp, item.domains.join('|'), item.keywords.replace(/,/g, ' '), item.description.replace(/,/g, ' '),
+        writeln(info, [item.site, item.ip.join('|'), item.geoInfo.isp, item.domains.join('|'), strEscape(item.keywords), strEscape(item.description),
             `${item.geoInfo.location.lat}:${item.geoInfo.location.lon}`, item.geoInfo.city.names['zh-CN'],
             item.geoInfo.country.names['zh-CN']]); 
     });

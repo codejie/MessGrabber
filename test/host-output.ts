@@ -1,5 +1,6 @@
 import fs, { WriteStream } from 'fs';
 import { FacetStruct, HostInfoStruct, HostSearchGrapper, HostSearchRequest, HostSearchResponse } from "../src/grapper/host-search-grapper";
+import { strEscape } from '../src/helper';
 import Session from '../src/session';
 
 export async function hostOutput(session: Session): Promise<void> {
@@ -25,7 +26,7 @@ export async function hostOutput(session: Session): Promise<void> {
     const hostInfo = fs.createWriteStream('./output/host-output.csv');
     writeln(hostInfo, ['ip', 'rdns', 'app', 'organization', 'location', 'city', 'country']);
     result.forEach(item => {
-        writeln(hostInfo, [item.ip, item.portInfo.rdns, item.portInfo.app, item.geoInfo.organization.replace(',',' '),
+        writeln(hostInfo, [item.ip, item.portInfo.rdns, item.portInfo.app, strEscape(item.geoInfo.organization),
             `${item.geoInfo.location.lat}:${item.geoInfo.location.lon}`, item.geoInfo.city.names['zh-CN'],
             item.geoInfo.country.names['zh-CN']]); 
     });
