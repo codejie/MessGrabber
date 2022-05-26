@@ -1,4 +1,4 @@
-import { FilterOptions, Grapper, Request, Response } from ".";
+import { FilterOptions, Grabber, Request, Response } from ".";
 import logger from "../logger";
 import Session from "../session";
 
@@ -17,7 +17,7 @@ export interface DomainSearchResponse extends Response {
     domains: DomainInfoStruct[]
 }
 
-export class DomainSearchGrapper extends Grapper {
+export class DomainSearchGrabber extends Grabber {
     constructor(protected session: Session) {
         super(session);
     }

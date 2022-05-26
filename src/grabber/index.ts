@@ -14,7 +14,7 @@ export interface Response {
     total: number
 }
 
-export abstract class Grapper {
+export abstract class Grabber {
     protected filters: string[] | undefined = undefined;
     protected facets: string[] | undefined = undefined;
 

@@ -1,14 +1,14 @@
 import fs, { WriteStream } from 'fs';
 import Session from '../src/session';
-import { FacetStruct, WebInfoStruct, WebSearchGrapper, WebSearchRequest, WebSearchResponse } from "../src/grapper/web-search-grapper";
 import { strEscape } from '../src/helper';
+import { WebInfoStruct, WebSearchGrabber, WebSearchRequest, WebSearchResponse } from '../src/grabber/web-search-grabber';
 
 export async function webOutput(session: Session): Promise<void> {
 
     const result: WebInfoStruct[] = [];
     // let facets: FacetStruct[];
 
-    const grapper = new WebSearchGrapper(session);
+    const grapper = new WebSearchGrabber(session);
     for (let page = 1; page < 10; ++ page) {
         const ret = await grapper.request(<WebSearchRequest>{
             page: 1,

@@ -1,5 +1,5 @@
 import fs, { WriteStream } from 'fs';
-import { FacetStruct, HostInfoStruct, HostSearchGrapper, HostSearchRequest, HostSearchResponse } from "../src/grapper/host-search-grapper";
+import { HostInfoStruct, FacetStruct, HostSearchGrabber, HostSearchRequest, HostSearchResponse } from '../src/grabber/host-search-grabber';
 import { strEscape } from '../src/helper';
 import Session from '../src/session';
 
@@ -8,7 +8,7 @@ export async function hostOutput(session: Session): Promise<void> {
     const result: HostInfoStruct[] = [];
     let facets: FacetStruct[];
 
-    const grapper = new HostSearchGrapper(session);
+    const grapper = new HostSearchGrabber(session);
     for (let page = 1; page < 10; ++ page) {
         const ret = await grapper.request(<HostSearchRequest>{
             page: 1,

@@ -1,16 +1,20 @@
-import { FilterOptions, Grapper, Request, Response } from ".";
-import logger from "../logger";
+import { FilterOptions, Grabber, Request, Response } from ".";
 import Session from "../session";
 
-export interface HostSearchRequest extends Request {
+export interface WebSearchRequest extends Request {
     filter: FilterOptions,
     facets?: string[]    
 }
 
-export interface HostInfoStruct {
+export interface WebInfoStruct {
+    domains: any,
+    site: string,
+    title: string
+    keywords: string,
+    description: string,
     geoInfo: any,
-    ip: string,
-    portInfo: any,
+    ip: string[],
+    server: any[],
     whois: any,
     timestamp: Date
 }
@@ -23,37 +27,43 @@ export interface FacetStruct {
     }[]
 }
 
-export interface HostSearchResponse extends Response {
-    infos: HostInfoStruct[],
+export interface WebSearchResponse extends Response {
+    infos: WebInfoStruct[],
     factes?: FacetStruct[]
 }
 
-export class HostSearchGrapper extends Grapper {
+export class WebSearchGrabber extends Grabber {
     constructor(protected session: Session) {
         super(session);
     }
 
     protected initFilters(): string[] | undefined {
-        return ['app', 'ver', 'device', 'os', 'service', 'ip', 'cidr',
-                'hostname', 'port', 'city', 'country', 'asn'];
+        return ['app', 'header', 'keywords', 'desc', 'title', 'ip', 'site',
+                 'city', 'country'];
     }
 
     protected initFacets(): string[] | undefined{
-        return ['app', 'device', 'service', 'os', 'port', 'country', 'city'];
-    }      
+        return ['webapp', 'component', 'framework', 'frontend', 'server', 'waf',
+                'os', 'country', 'city'];
+    }    
 
-    protected makeQueryUri(req: HostSearchRequest): string {
-        const ret = `/host/search?query=${this.scanFilterOptions(req.filter)}&page=${req.page}&facets=${this.scanFacetsOptions(req.facets)}`;
+    protected makeQueryUri(req: WebSearchRequest): string {
+        const ret = `/web/search?query=${this.scanFilterOptions(req.filter)}&page=${req.page}&facets=${this.scanFacetsOptions(req.facets)}`;
         return encodeURI(ret);
     }
     
-    protected analyseResponse(req: HostSearchRequest, resp: any): HostSearchResponse {
-        const infos: HostInfoStruct[] = [];
+    protected analyseResponse(req: WebSearchRequest, resp: any): WebSearchResponse {
+        const infos: WebInfoStruct[] = [];
         (resp.data.matches as any[]).forEach(item => {
             infos.push({
+                domains: item.domains,
+                site: item.site,
+                title: item.title,
+                keywords: item.keywords,
+                description: item.description,
                 geoInfo: item.geoinfo,
                 ip: item.ip,
-                portInfo: item.portinfo,
+                server: item.server,
                 whois: item.whois,
                 timestamp: new Date(item.timestamp)
             });

@@ -1,13 +1,13 @@
 import fs, { write, WriteStream } from 'fs';
+import { DomainInfoStruct, DomainSearchGrabber, DomainSearchRequest, DomainSearchResponse } from '../src/grabber/domain-search-grabber';
 import Session from '../src/session';
-import { DomainInfoStruct, DomainSearchGrapper, DomainSearchRequest, DomainSearchResponse } from '../src/grapper/domain-search-grapper';
 
 export async function domainOutput(session: Session): Promise<void> {
 
     let result: DomainInfoStruct[] = [];
     // let facets: FacetStruct[];
 
-    const grapper = new DomainSearchGrapper(session);
+    const grapper = new DomainSearchGrabber(session);
 
     for (let page = 1; page < 3; ++ page) {
         const ret = await grapper.request(<DomainSearchRequest>{
